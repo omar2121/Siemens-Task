@@ -14,10 +14,15 @@ The parameters for the request will be a pcap file name for which tshark need to
 tshark -cc -r <file_name> -V -o ber.show_internals:true”
 
 ## How to use
-send HTTP requests to 
+Run the program by opening http_parser.exe in the Release folder.
+This turns on the HTTP server which will handle all requests to:
 `localhost:800\resource`
 
-this can be done using any method. For Example:
+HTTP requests can be sent using a multitude of methods. For Example, using `curl`
+
+for that you need to install curl for windows: https://curl.se/windows/
+
+and running the command 
 
 `curl -d "help" -X POST localhost:800/resource`
 
