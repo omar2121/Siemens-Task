@@ -12,39 +12,42 @@
 using namespace std;
 using namespace restbed;
 
-string run_cmd(string cmd) 
+/*
+* Runs command and returns output
+*
+* @param cmd The command to be run
+* @return the output of the command in stdout
+*/
+string run_cmd(string cmd)
 {
-    /*
-    * Runs command and returns output
-    * 
-    * @param cmd The command to be run
-    * @return the output of the command in stdout
-    */
+
     char buffer[256];
     string result = "";
     FILE* pipe = _popen(cmd.c_str(), "r");
     if (!pipe) throw std::runtime_error("popen() failed!");
-    
+
     while (!feof(pipe)) {
         if (fgets(buffer, 128, pipe) != NULL)
             result += buffer;
     }
-    
+
     _pclose(pipe);
     return result;
 }
-string parse_request(string request) 
+
+/*
+* Parses Http request message and returns response message
+*
+* @param request The Http request message
+* @return the output response
+*/
+string parse_request(string request)
 {
-    /*
-    * Parses Http request message and returns response message
-    * 
-    * @param request The Http request message
-    * @return the output response
-    */
+
     auto tokens = String::split(request, ' ');
     string result;
     // Print help
-    if (tokens[0] == "-h" || tokens[0] == "--help" || tokens[0] == "help") 
+    if (tokens[0] == "-h" || tokens[0] == "--help" || tokens[0] == "help")
     {
         result = "Possible requests:\n"
                     "\t run <command with arguments>\t runs command and returns output as response.\n"
@@ -89,7 +92,11 @@ string parse_request(string request)
     result = "Invalid request. Use -h OR --help OR help for more information.";
     return result;
 }
-
+/*
+* Handles any requests recieved by the session using the POST method
+*
+* @param session The Http session
+*/
 void post_method_handler(const shared_ptr< Session > session)
 {
     const auto request = session->get_request();
